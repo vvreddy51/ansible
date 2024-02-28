@@ -1,0 +1,16 @@
+---
+- name: install apache2 on ubuntu
+  become: yes
+  hosts: all
+  tasks:
+    - name: install httpd
+      package:
+        name: "{{ package_name }}"
+        state: present
+    - name: enable and start 
+      ansible.builtin.systemd_service:
+        name: "{{ package_name }}"
+        enabled: true
+        state: started
+      
+      

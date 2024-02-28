@@ -1,0 +1,20 @@
+---
+- name: install apache2 
+  become: yes
+  hosts: all
+  tasks:
+    - name:  fail for unsupported os families
+      ansible.builtin.fail:
+        msg: "This Playbook is designed for only Debian and RedHat os families"
+      when: ansible_facts['os_family'] != 'Debian' and ansible_facts['os_family'] != 'RedHat' 
+    - name: install httpd
+      package:
+        name: "{{ package_name }}"
+        state: present
+    - name: enable and start 
+      ansible.builtin.systemd_service:
+        name: "{{ package_name }}"
+        enabled: true
+        state: started
+      
+      

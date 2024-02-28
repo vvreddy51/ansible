@@ -1,0 +1,38 @@
+---
+- name: install lamp stack
+  hosts: webserver
+  become: yes
+  tasks:
+    - name: fail for unsupported os
+      ansible.builtin.fail:
+        msg: "This playbook is designed only for Ubuntu os"
+      when: ansible_facts['distribution'] != 'Ubuntu'
+    - name: update packages and install apache2
+      ansible.builtin.apt:
+        name: "{{ package }}"
+        update_cache: yes
+        state: present
+      notify:
+        - enable and satrt
+    - name: install php packages
+      ansible.builtin.apt:
+        name: "{{ php_packages }}"
+        state: present
+      notify:
+        - restart apache2
+    - name: copy info.php
+      copy:
+        src: info.php
+        dest: /var/www/html/info.php
+      notify:
+        - restart apache2
+  handlers:
+    - name: enable and start apache
+      service:
+        name: "{{ package }}"
+        enabled: yes
+        state: started
+    - name: restart apache
+      service:
+        name: "{{ package }}"
+        state: restarted

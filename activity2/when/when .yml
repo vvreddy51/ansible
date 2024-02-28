@@ -1,0 +1,28 @@
+---
+- name: install apache2 on ubuntu
+  become: yes
+  hosts: all
+  tasks:
+    - name: update and install apache2 on ubuntu
+      ansible.builtin.apt:
+        name: apache2
+        state: present
+      when: ansible_facts['os_family'] == 'Debian'
+    - name: enable and start apache2 
+      ansible.builtin.systemd_service:
+        name: apache2
+        enabled: true
+        state: started
+      when: ansible_facts['os_family'] == 'Debian'
+    - name: update and install httpd on centos
+      ansible.builtin.dnf:
+        name: httpd
+        state: present
+      when: ansible_facts['os_family'] == 'RedHat'
+    - name: enable and start httpd
+      ansible.builtin.systemd_service:
+        name: httpd
+        enabled: true
+        state: started
+      when: ansible_facts['os_family'] == 'RedHat'
+      
