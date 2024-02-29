@@ -4,8 +4,8 @@
   tasks:
     - name: fail for unsupported os
       ansible.builtin.fail:
-        msg: "This playbook is designed only for centos os"
-      when: ansible_facts['distribution'] != 'centos'
+        msg: "This playbook is designed only for RedHat os"
+      when: ansible_facts['os_family'] != 'RedHat'
     - name: update packages and install java
       ansible.builtin.yum:
         name: "{{ java_package_name }}"
