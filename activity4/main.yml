@@ -11,11 +11,15 @@
         name: "{{ java_package_name }}"
         state: present
       become: yes
+    - ansible.builtin.debug:
+        msg: "java is installed using package {{ java_package_name }}"
     - name: create tomcat group
       ansible.builtin.group:
         name: "{{ group }}"
         state: present
       become: yes
+    - ansible.builtin.debug:
+        msg: "group {{ group }} has been created"
     - name: create tomcat user
       ansible.builtin.user:
         create_home: yes
@@ -26,7 +30,26 @@
         system: true
         state: present
       become: yes
+    - ansible.builtin.debug:
+        msg: "user {{ user }} has been created"
     - name: download tomcat tar
-      ansible.builtin.get_url:
-        url: "{{ tomcat_url }}"
-        dest: /tmp/apache-tomcat-10.0.10.tar.gz
+      ansible.builtin.unarchive:
+        src: "{{ tomcat_url }}"
+        dest: "{{ home_dir  }}"
+        owner: "{{ user }}"
+        remote_src: yes
+      become: yes
+    - ansible.builtin.debug:
+        msg: "tomcat is downloaded and extracted to {{ home_dir  }}"
+    - name: find all the shell files
+      find:
+        paths: "/opt/tomcat/apache-tomcat-10.0.10/bin"
+        patterns: '*.sh'
+      register: shell_files
+    - name: change permissions to execute
+      file:
+        path: "{{ item.path }}"
+        owner: "{{ user }}"
+        group: "{{ group }}"
+        mode: "755"
+      loop: "{{ shell_files.files }}"
