@@ -5,8 +5,8 @@
   tasks:
     - name: fail for unsupported os
       ansible.builtin.fail:
-        msg: "This playbook is designed only for Ubuntu os"
-      when: ansible_facts['distribution'] != 'Ubuntu'
+        msg: "This playbook is designed only for  os family"
+      when: ansible_facts['os_family'] != 'RedHat'
     - name: update packages and install apache2
       ansible.builtin.apt:
         name: "{{ package }}"
