@@ -13,10 +13,6 @@
       become: yes
     - ansible.builtin.debug:
         msg: "java is installed using package {{ java_package_name }}"
-    - name: check if the file exists
-      ansible.builtin.stat:
-        path: "{{ home_dir }}" 
-        register: apache-tomcat-10.0.10
     - name: create tomcat group
       ansible.builtin.group:
         name: "{{ group }}"
@@ -60,5 +56,12 @@
         mode: "755"
       become: yes
       loop: "{{ shell_files.files }}"
+      notify:
+        - if file does not exists
+  handlers:
+    - name: if  the file exists
+      ansible.builtin.stat:
+        path: "{{ home_dir }}" 
+        register: apache-tomcat-10.0.10
   
      
