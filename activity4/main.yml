@@ -57,7 +57,7 @@
       become: yes
       loop: "{{ shell_files.files }}"
       notify:
-        - if file does not exists
+        - if file does not exist
   handlers:
     - name: if  the file exists
       ansible.builtin.stat:
