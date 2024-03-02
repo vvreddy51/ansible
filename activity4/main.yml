@@ -1,6 +1,7 @@
 ---
 - name: install tomcat 10
   hosts: appserver
+  become: yes
   tasks:
     - name: fail for unsupported os
       ansible.builtin.fail:
@@ -10,14 +11,12 @@
       ansible.builtin.apt:
         name: "{{ java_package_name }}"
         state: present
-      become: yes
     - ansible.builtin.debug:
         msg: "java is installed using package {{ java_package_name }}"
     - name: create tomcat group
       ansible.builtin.group:
         name: "{{ group }}"
         state: present
-      become: yes
     - ansible.builtin.debug:
         msg: "group {{ group }} has been created"
     - name: create tomcat user
@@ -29,7 +28,6 @@
         shell: "{{ user_shell }}"
         system: true
         state: present
-      become: yes
     - ansible.builtin.debug:
         msg: "user {{ user }} has been created"
     - name: download tomcat tar
@@ -50,7 +48,6 @@
         dest: "{{ home_dir  }}"
         owner: "{{ user }}"
         remote_src: yes
-      become: yes
       when: "not tomcat_tar_file.stats.exists"
     - ansible.builtin.debug:
         msg: "tomcat is downloaded and extracted to {{ home_dir  }}"
@@ -60,14 +57,12 @@
         patterns: '*.sh'
         recurse: yes
       register: shell_files
-      become: yes
     - name: change permissions to execute
       file:
         path: "{{ item.path }}"
         owner: "{{ user }}"
         group: "{{ group }}"
         mode: "755"
-      become: yes
       loop: "{{ shell_files.files }}"
       
  
