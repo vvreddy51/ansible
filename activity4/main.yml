@@ -32,7 +32,14 @@
       become: yes
     - ansible.builtin.debug:
         msg: "user {{ user }} has been created"
-    - ansible.builtin.stat:
+    - name: download tomcat tar
+      ansible.builtin.get_url:
+        url: "{{ tomcat_url }}"
+        dest: /tmp/apache-tomcat-10.0.10.tar.gz
+    - ansible.builtin.debug:
+        msg: "tomcat is downloaded to /tmp/apache-tomcat-10.0.10.tar.gz"
+    - name: check the download file
+      ansible.builtin.stat:
        path: /opt/tomcat/apache-tomcat-10.0.10
       register: tomcat_tar_file 
     - ansible.builtin.debug:
