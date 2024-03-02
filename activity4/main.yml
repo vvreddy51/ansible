@@ -39,7 +39,7 @@
     - name: check the download file
       ansible.builtin.stat:
        path: /opt/tomcat/apache-tomcat-10.0.10
-      register: tomcat_tar_file 
+      register: tomcat
     - ansible.builtin.debug:
         msg: "download if file not exists"
     - name: download tomcat tar
@@ -48,7 +48,7 @@
         dest: "{{ home_dir  }}"
         owner: "{{ user }}"
         remote_src: yes
-      when: "not tomcat_tar_file.stat.exists"
+      when: "not tomcat.stat.exists"
     - ansible.builtin.debug:
         msg: "tomcat is downloaded and extracted to {{ home_dir  }}"
     - name: find all the shell files
