@@ -4,8 +4,8 @@
   tasks:
     - name: fail for unsupported os
       ansible.builtin.fail:
-        msg: "This playbook is designed only for RedHat os"
-      when: ansible_facts['os_family'] != 'RedHat'
+        msg: "This playbook is designed only for Debian os"
+      when: ansible_facts['os_family'] != 'Debian'
     - name: update packages and install java
       ansible.builtin.yum:
         name: "{{ java_package_name }}"
@@ -32,6 +32,11 @@
       become: yes
     - ansible.builtin.debug:
         msg: "user {{ user }} has been created"
+    - ansible.builtin.stat:
+       path: /opt/tomcat/apache-tomcat-10.0.10
+      register: tomcat_tar-file 
+    - ansible.builtin.debug:
+        msg: "download if file not exists"
     - name: download tomcat tar
       ansible.builtin.unarchive:
         src: "{{ tomcat_url }}"
@@ -39,6 +44,7 @@
         owner: "{{ user }}"
         remote_src: yes
       become: yes
+      when: "if not tomcat_tar-file.stats.exists"
     - ansible.builtin.debug:
         msg: "tomcat is downloaded and extracted to {{ home_dir  }}"
     - name: find all the shell files
@@ -56,12 +62,7 @@
         mode: "755"
       become: yes
       loop: "{{ shell_files.files }}"
-      notify:
-        - if file does not exist
-  handlers:
-    - name: if  the file exists
-      ansible.builtin.stat:
-        path: "{{ home_dir }}" 
-        register: apache-tomcat-10.0.10
+      
+ 
   
      
