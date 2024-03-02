@@ -66,7 +66,7 @@
       loop: "{{ shell_files.files }}"
     - name: create Tomcat Application Accounts
       ansible.builtin.template:
-        src: templates/tomcat-user.xml
+        src: templates/tomcat-user.xml.j2
         dest: "/opt/tomcat/apache-tomcat-10.0.10/conf/tomcat-user.xml"
         owner: "{{ user }}"
         group: "{{ group }}"
@@ -75,7 +75,7 @@
         - restart tomcat
     - name: Allow Remote Host for  manager 
       ansible.builtin.template:
-        src: templates/manager-context.xml
+        src: templates/manager-context.xml.j2
         dest: "/opt/tomcat/apache-tomcat-10.0.10/webapps/manager/META-INF/context.xml"
         owner: "{{ user }}"
         group: "{{ group }}"
@@ -84,7 +84,7 @@
         - restart tomcat
     - name: Allow Remote Host for  Host-manager 
       ansible.builtin.template:
-        src: templates/host-manager-context.xml
+        src: templates/host-manager-context.xml.j2
         dest: "/opt/tomcat/apache-tomcat-10.0.10/webapps/host-manager/META-INF/context.xml"
         owner: "{{ user }}"
         group: "{{ group }}"
@@ -93,7 +93,7 @@
         - restart tomcat
     - name: create service file
       ansible.builtin.template:
-        src: templates/tomcat.service
+        src: templates/tomcat.service.j2
         dest: "/etc/systemd/system/tomcat.service"
       notify:
        - daemon-reload and strat Tomcat
