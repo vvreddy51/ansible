@@ -1,5 +1,5 @@
 ---
-java_package_name: openjdk-11-jdk
+java_package_name: java-11-openjdk
 user: tomcat
 group: tomcat
 home_dir: /opt/tomcat
