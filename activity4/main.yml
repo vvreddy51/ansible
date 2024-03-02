@@ -34,7 +34,7 @@
         msg: "user {{ user }} has been created"
     - ansible.builtin.stat:
        path: /opt/tomcat/apache-tomcat-10.0.10
-      register: tomcat_tar-file 
+      register: tomcat_tar_file 
     - ansible.builtin.debug:
         msg: "download if file not exists"
     - name: download tomcat tar
@@ -44,7 +44,7 @@
         owner: "{{ user }}"
         remote_src: yes
       become: yes
-      when: "if not tomcat_tar-file.stats.exists"
+      when: "if not tomcat_tar_file.stats.exists"
     - ansible.builtin.debug:
         msg: "tomcat is downloaded and extracted to {{ home_dir  }}"
     - name: find all the shell files
