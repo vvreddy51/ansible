@@ -65,29 +65,35 @@
         mode: "755"
       loop: "{{ shell_files.files }}"
     - name: create Tomcat Application Accounts
-      ansible.builtin.copy:
-        src: files/tomcat-user.xml
+      ansible.builtin.template:
+        src: templates/tomcat-user.xml
         dest: "/opt/tomcat/apache-tomcat-10.0.10/conf/tomcat-user.xml"
         owner: "{{ user }}"
         group: "{{ group }}"
         mode: "0600"
+      notify:
+        - restart tomcat
     - name: Allow Remote Host for  manager 
-      ansible.builtin.copy:
-        src: files/manager-context.xml
+      ansible.builtin.template:
+        src: templates/manager-context.xml
         dest: "/opt/tomcat/apache-tomcat-10.0.10/webapps/manager/META-INF/context.xml"
         owner: "{{ user }}"
         group: "{{ group }}"
         mode: "0640"
+      notify:
+        - restart tomcat
     - name: Allow Remote Host for  Host-manager 
-      ansible.builtin.copy:
-        src: files/host-manager-context.xml
+      ansible.builtin.template:
+        src: templates/host-manager-context.xml
         dest: "/opt/tomcat/apache-tomcat-10.0.10/webapps/host-manager/META-INF/context.xml"
         owner: "{{ user }}"
         group: "{{ group }}"
         mode: "0640"
+      notify:
+        - restart tomcat
     - name: create service file
-      ansible.builtin.copy:
-        src: files/tomcat.service
+      ansible.builtin.template:
+        src: templates/tomcat.service
         dest: "/etc/systemd/system/tomcat.service"
       notify:
        - daemon-reload and strat Tomcat
@@ -98,6 +104,12 @@
         daemon_reload: true
         enabled: true
         state: started
+   - name: restrat Tomcat
+     ansible.builtin.systemd_service:
+        name: tomcat
+        daemon_reload: true
+        enabled: true
+        state: restarted
 
     
       
