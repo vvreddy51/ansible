@@ -1,0 +1,118 @@
+---
+- name: install tomcat 10
+  hosts: appserver
+  become: yes
+  tasks:
+    - name: fail for unsupported os
+      ansible.builtin.fail:
+        msg: "This playbook is designed only for RedHat os"
+      when: ansible_facts['os_family'] != 'RedHat'
+    - name: update packages and install java
+      ansible.builtin.yum:
+        name: "{{ java_package_name }}"
+        state: present
+    - ansible.builtin.debug:
+        msg: "java is installed using package {{ java_package_name }}"
+    - name: create tomcat group
+      ansible.builtin.group:
+        name: "{{ group }}"
+        state: present
+    - ansible.builtin.debug:
+        msg: "group {{ group }} has been created"
+    - name: create tomcat user
+      ansible.builtin.user:
+        create_home: yes
+        group: "{{ group }}"
+        home: "{{ home_dir  }}"
+        name: "{{ user }}"
+        shell: "{{ user_shell }}"
+        system: true
+        state: present
+    - ansible.builtin.debug:
+        msg: "user {{ user }} has been created"
+    - name: download tomcat tar
+      ansible.builtin.get_url:
+        url: "{{ tomcat_url }}"
+        dest: /tmp/apache-tomcat-10.0.10.tar.gz
+    - ansible.builtin.debug:
+        msg: "tomcat is downloaded to /tmp/apache-tomcat-10.0.10.tar.gz"
+    - name: check the download file
+      ansible.builtin.stat:
+       path: /opt/tomcat/apache-tomcat-10.0.10
+      register: tomcat
+    - ansible.builtin.debug:
+        msg: "download if file not exists"
+    - name: download tomcat tar
+      ansible.builtin.unarchive:
+        src: "{{ tomcat_url }}"
+        dest: "{{ home_dir  }}"
+        owner: "{{ user }}"
+        remote_src: yes
+      when: "not tomcat.stat.exists"
+    - ansible.builtin.debug:
+        msg: "tomcat is downloaded and extracted to {{ home_dir  }}"
+    - name: find all the shell files
+      find:
+        paths: "/opt/tomcat/apache-tomcat-10.0.10/bin"
+        patterns: '*.sh'
+        recurse: yes
+      register: shell_files
+    - name: change permissions to execute
+      file:
+        path: "{{ item.path }}"
+        owner: "{{ user }}"
+        group: "{{ group }}"
+        mode: "755"
+      loop: "{{ shell_files.files }}"
+    - name: create Tomcat Application Accounts
+      ansible.builtin.template:
+        src: templates/tomcat-user.xml.j2
+        dest: "/opt/tomcat/apache-tomcat-10.0.10/conf/tomcat-user.xml"
+        owner: "{{ user }}"
+        group: "{{ group }}"
+        mode: "0600"
+      notify:
+        - restart tomcat
+    - name: Allow Remote Host for  manager 
+      ansible.builtin.template:
+        src: templates/manager-context.xml.j2
+        dest: "/opt/tomcat/apache-tomcat-10.0.10/webapps/manager/META-INF/context.xml"
+        owner: "{{ user }}"
+        group: "{{ group }}"
+        mode: "0640"
+      notify:
+        - restart tomcat
+    - name: Allow Remote Host for  Host-manager 
+      ansible.builtin.template:
+        src: templates/host-manager-context.xml.j2
+        dest: "/opt/tomcat/apache-tomcat-10.0.10/webapps/host-manager/META-INF/context.xml"
+        owner: "{{ user }}"
+        group: "{{ group }}"
+        mode: "0640"
+      notify:
+        - restart tomcat
+    - name: create service file
+      ansible.builtin.template:
+        src: templates/tomcat.service.j2
+        dest: "/etc/systemd/system/tomcat.service"
+      notify:
+       - daemon-reload and strat Tomcat
+  handlers:
+   - name: daemon-reload and strat Tomcat
+     ansible.builtin.systemd_service:
+        name: tomcat
+        daemon_reload: true
+        enabled: true
+        state: started
+   - name: restart tomcat
+     ansible.builtin.systemd_service:
+        name: tomcat
+        daemon_reload: true
+        enabled: true
+        state: restarted
+
+    
+      
+ 
+  
+     
