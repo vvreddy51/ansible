@@ -104,7 +104,7 @@
         daemon_reload: true
         enabled: true
         state: started
-   - name: restrat Tomcat
+   - name: restart tomcat
      ansible.builtin.systemd_service:
         name: tomcat
         daemon_reload: true
