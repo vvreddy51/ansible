@@ -1,0 +1,43 @@
+---
+- name: install tomcat 10
+  hosts: appserver
+  become: yes
+  tasks:
+    - name: fail for unsupported os
+      ansible.builtin.fail:
+        msg: "This playbook is designed only for Debian os"
+      when: ansible_facts['os_family'] != 'Debian'
+    - name: update packages and install dotnet
+      ansible.builtin.apt:
+        name: "{{ package_dotnet }}"
+        state: present
+    - ansible.builtin.debug:
+        msg: "dotnetis installed using package {{ package_dotnet }}"
+    - name: create tomcat group
+      ansible.builtin.group:
+        name: "{{ group }}"
+        state: present
+    - ansible.builtin.debug:
+        msg: "group {{ group }} has been created"
+    - name: create tomcat user
+      ansible.builtin.user:
+        name: "{{ user }}"
+        state: present
+    - ansible.builtin.debug:
+        msg: "user {{ user }} has been created"
+    - name: download nop
+      ansible.builtin.get_url:
+        url: "{{ nop_url }}"
+        dest: /tmp/nopCommerce_4.60.6_NoSource_linux_x64.zip
+    - ansible.builtin.debug:
+        msg: "tomcat is downloaded to /tmp/nopCommerce_4.60.6_NoSource_linux_x64.zip"
+    - name:  unzip nop
+      ansible.builtin.unarchive:
+        src: "{{ tomcat_url }}"
+        dest: "{{ home_dir  }}"
+        owner: "{{ user }}"
+        remote_src: yes
+    - ansible.builtin.debug:
+        msg: "tomcat is downloaded and extracted to {{ home_dir  }}"
+    
+      
