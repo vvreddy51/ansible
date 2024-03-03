@@ -1,5 +1,5 @@
 ---
-- name: install tomcat 10
+- name: install nopCommerce
   hosts: appserver
   become: yes
   tasks:
