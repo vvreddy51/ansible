@@ -44,6 +44,31 @@
       when: "not nop_file.stat.exists"
     - ansible.builtin.debug:
         msg: "tomcat is downloaded and extracted to nopCommerce"
-    
+    - name: create bin dir
+      ansible.builtin.file:
+        path: /nop/nopCommerce/bin
+        state: directory
+    - name: create bin logs
+      ansible.builtin.file:
+        path: /nop/nopCommerce/logs
+        state: directory
+    - name: changing onwership
+      ansible.builtin.file:
+        path: "{{ home_dir }}"
+        owner: "{{ user }}"
+        group: "{{ group }}"
+    - name: create service file
+      ansible.builtin.file:
+        src: files/nopCommerce.service
+        dest: "/etc/systemd/system/nopCommerce.service"
+      notify:
+       - daemon-reload and strat nopCommerce
+  handlers:
+    - name: daemon-reload and strat nopCommerce
+      ansible.builtin.systemd_service:
+        name: nopCommerce
+        daemon_reload: true
+        enabled: yes
+        state: started
     
       
