@@ -54,9 +54,9 @@
         src: templates/nopCommerce.service.j2
         dest: "/etc/systemd/system/nopCommerce.service"
       notify:
-       - daemon-reload and strat nopCommerce
+       - daemon-reload and start nopCommerce
   handlers:
-    - name: daemon-reload and strat nopCommerce
+    - name: daemon-reload and start nopCommerce
       ansible.builtin.systemd_service:
         name: nopCommerce
         daemon_reload: true
