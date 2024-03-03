@@ -42,5 +42,9 @@
         remote_src: yes
     - ansible.builtin.debug:
         msg: "tomcat is downloaded and extracted to {{ home_dir }}"
+    - name: Remove existing file
+      ansible.builtin.file:
+         path: /var/www/nopCommerce
+         state: absent
     
       
