@@ -31,6 +31,10 @@
         dest: /tmp/nopCommerce_4.60.6_NoSource_linux_x64.zip
     - ansible.builtin.debug:
         msg: "tomcat is downloaded to /tmp/nopCommerce_4.60.6_NoSource_linux_x64.zip"
+    - name: Create destination directory
+      ansible.builtin.file:
+        path: /nop
+        state: directory
     - name:  unzip nop
       ansible.builtin.unarchive:
         src: "{{ nop_url }}"
