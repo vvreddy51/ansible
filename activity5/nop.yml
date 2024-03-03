@@ -28,9 +28,9 @@
     - name: download nop
       ansible.builtin.get_url:
         url: "{{ nop_url }}"
-        dest: /tmp/nopCommerce_4.60.6_NoSource_linux_x64.zip
+        dest: "{{ home_dir  }}"
     - ansible.builtin.debug:
-        msg: "tomcat is downloaded to /tmp/nopCommerce_4.60.6_NoSource_linux_x64.zip"
+        msg: "tomcat is downloaded to {{ home_dir  }}"
     - name:  unzip nop
       ansible.builtin.unarchive:
         src: "{{ nop_url }}"
