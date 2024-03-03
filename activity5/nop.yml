@@ -35,10 +35,11 @@
     - name:  unzip nop
       ansible.builtin.unarchive:
         src: "{{ nop_url }}"
-        dest: /nop/nopCommerce
+        dest: /nop
+        owner: nop
         remote_src: yes
     - ansible.builtin.debug:
-        msg: "tomcat is downloaded and extracted to {{ home_dir }}"
+        msg: "tomcat is downloaded and extracted to nopCommerce"
     
     
       
