@@ -30,14 +30,18 @@
       ansible.builtin.get_url:
         url: "{{ nop_url }}"
         dest: "{{ home_dir  }}"
+    - ansible.builtin.stat:
+        path: "{{ home_dir }}"
+      register: nop_file
     - ansible.builtin.debug:
         msg: "tomcat is downloaded to {{ home_dir }}"
     - name:  unzip nop
       ansible.builtin.unarchive:
         src: "{{ nop_url }}"
-        dest: /nop
+        dest: /nop/nopCommerce
         owner: nop
         remote_src: yes
+      when: "not nop_file.stat.exists"
     - ansible.builtin.debug:
         msg: "tomcat is downloaded and extracted to nopCommerce"
     
