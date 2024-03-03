@@ -25,17 +25,20 @@
         state: present
     - ansible.builtin.debug:
         msg: "user {{ user }} has been created"
+    - name: Create destination directory
+      ansible.builtin.file:
+        path: /var/www/nopCommerce
+        state: directory
     - name: download nop
       ansible.builtin.get_url:
         url: "{{ nop_url }}"
         dest: "{{ home_dir  }}"
     - ansible.builtin.debug:
-        msg: "tomcat is downloaded to {{ home_dir  }}"
+        msg: "tomcat is downloaded to {{ home_dir }}"
     - name:  unzip nop
       ansible.builtin.unarchive:
         src: "{{ nop_url }}"
-        dest: "{{ home_dir  }}"
-        owner: "{{ user }}"
+        dest: "{{ home_dir }}"
         remote_src: yes
     - ansible.builtin.debug:
         msg: "tomcat is downloaded and extracted to {{ home_dir }}"
