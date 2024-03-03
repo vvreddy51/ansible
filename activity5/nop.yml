@@ -33,11 +33,11 @@
         msg: "tomcat is downloaded to /tmp/nopCommerce_4.60.6_NoSource_linux_x64.zip"
     - name:  unzip nop
       ansible.builtin.unarchive:
-        src: "{{ tomcat_url }}"
+        src: "{{ nop_url }}"
         dest: "{{ home_dir  }}"
         owner: "{{ user }}"
         remote_src: yes
     - ansible.builtin.debug:
-        msg: "tomcat is downloaded and extracted to {{ home_dir  }}"
+        msg: "tomcat is downloaded and extracted to {{ home_dir }}"
     
       
