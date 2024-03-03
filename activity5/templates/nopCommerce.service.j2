@@ -2,8 +2,8 @@
 Description=Example nopCommerce app running on Xubuntu
 
 [Service]
-WorkingDirectory=/nop
-ExecStart=/usr/bin/dotnet /nop/Nop.Web.dll --urls "http://0.0.0.0:5000"
+WorkingDirectory={{ home_dir }}
+ExecStart=/usr/bin/dotnet /{{ home_dir }}/Nop.Web.dll --urls "http://0.0.0.0:5000"
 Restart=always
 # Restart service after 10 seconds if the dotnet service crashes:
 RestartSec=10

@@ -25,7 +25,6 @@
         state: present
     - ansible.builtin.debug:
         msg: "user {{ user }} has been created"
-   
     - name: download nop
       ansible.builtin.get_url:
         url: "{{ nop_url }}"
