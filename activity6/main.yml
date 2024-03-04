@@ -43,10 +43,19 @@
         update_cache: yes
     - name: install docker
       ansible.builtin.apt:
-        name: docker-ce
+        name: "{{ docker_packages }}"
         state: present 
     - ansible.builtin.debug:
        msg: "docker installed"
+    - name: Install Docker Buildx plugin
+      command: docker buildx install
+      args:
+        creates: /usr/local/bin/docker-buildx-plugin
+
+    - name: Install Docker Compose plugin
+      command: docker compose install
+      args:
+        creates: /usr/local/bin/docker-compose-plugin
     - name: adding user ubuntu to docker group
       ansible.builtin.user:
         name: ubuntu
