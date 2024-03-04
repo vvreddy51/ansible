@@ -42,7 +42,7 @@
       ansible.builtin.apt:
         update_cache: yes
     - name: adding user ubuntu to docker group
-      ansible.builtin.user module:
+      ansible.builtin.user:
         name: ubuntu
         groups: docker
         append: true
