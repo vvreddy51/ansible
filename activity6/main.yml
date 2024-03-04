@@ -41,7 +41,7 @@
     - name: apt Update 
       ansible.builtin.apt:
         update_cache: yes
-    - nmae: install docker
+    - name: install docker
       ansible.builtin.apt:
         name: docker-ce
         state: present 
