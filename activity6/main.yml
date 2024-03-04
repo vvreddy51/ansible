@@ -26,7 +26,7 @@
         dest: /etc/apt/keyrings/docker.asc
     - ansible.builtin.debug:
         msg: "downloaded the gpg key"
-    - name: Set appropriate permissions for the GPG key
+    - name: set permissions for the GPG key
       ansible.builtin.file:
         path: /etc/apt/keyrings/docker.asc
         mode: '0644'
@@ -41,4 +41,11 @@
     - name: apt Update 
       ansible.builtin.apt:
         update_cache: yes
+    - name: adding user ubuntu to docker group
+      ansible.builtin.user module:
+        name: ubuntu
+        groups: docker
+        append: true
+    - ansible.builtin.debug:
+        msg: "ubuntu user added"
    
