@@ -41,6 +41,12 @@
     - name: apt Update 
       ansible.builtin.apt:
         update_cache: yes
+    - nmae: install docker
+      ansible.builtin.apt:
+        name: docker-ce
+        state: present 
+    - ansible.builtin.debug:
+       msg: "docker installed"
     - name: adding user ubuntu to docker group
       ansible.builtin.user:
         name: ubuntu
