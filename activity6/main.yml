@@ -1,0 +1,44 @@
+---
+- name: Install Docker on Ubuntu
+  hosts: appserver
+  become: yes
+  tasks:
+    - name: apt Update 
+      ansible.builtin.apt:
+        update_cache: yes
+    - name: Install packages
+      ansible.builtin.apt:
+        name: "{{ package }}"
+        update_cache: yes
+        state: present
+    - ansible.builtin.debug:
+        msg: "packages installed"
+    - name: for GPG key
+      ansible.builtin.file:
+        path: /etc/apt/keyrings
+        state: directory
+        mode: '0755'
+    - ansible.builtin.debug:
+        msg: "create a directory for gpg key"
+    - name: Download Docker's GPG key
+      ansible.builtin.get_url:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        dest: /etc/apt/keyrings/docker.asc
+    - ansible.builtin.debug:
+        msg: "downloaded the gpg key"
+    - name: Set appropriate permissions for the GPG key
+      ansible.builtin.file:
+        path: /etc/apt/keyrings/docker.asc
+        mode: '0644'
+    - ansible.builtin.debug:
+        msg: "given permissions for gpg key a+r"
+    - name: Add Docker repository to Apt sources
+      ansible.builtin.apt_repository:
+        repo: "deb [arch={{ ansible_architecture }} signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+        state: present
+    - ansible.builtin.debug:
+        msg: "gpg key added to repo"
+    - name: apt Update 
+      ansible.builtin.apt:
+        update_cache: yes
+   
