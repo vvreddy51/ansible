@@ -41,10 +41,8 @@
       ansible.builtin.unarchive:
         src: "{{ nop_url }}"
         dest: "{{ home_dir }}"
-        owner: 
-         - "{{ user }}"
-         - "{{ group }}"
-      
+        owner: "{{ user }}"
+        group: "{{ group }}"  
         mode: "755"
         remote_src: yes
     - ansible.builtin.debug:
