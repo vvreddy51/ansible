@@ -1,0 +1,14 @@
+---
+# handlers file for sample
+- name: daemon-reload and strat Tomcat
+  ansible.builtin.systemd_service:
+    name: tomcat
+    daemon_reload: true
+    enabled: yes
+    state: started
+- name: restart tomcat
+  ansible.builtin.systemd_service:
+    name: tomcat
+    daemon_reload: true
+    enabled: yes
+    state: restarted
