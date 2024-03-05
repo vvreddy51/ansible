@@ -13,13 +13,13 @@
         state: present
     - ansible.builtin.debug:
         msg: "dotnetis installed using package {{ package_dotnet }}"
-    - name: create tomcat group
+    - name: create nop group
       ansible.builtin.group:
         name: "{{ group }}"
         state: present
     - ansible.builtin.debug:
         msg: "group {{ group }} has been created"
-    - name: create tomcat user
+    - name: create nop user
       ansible.builtin.user:
         name: "{{ user }}"
         state: present
@@ -33,12 +33,12 @@
         path: "{{ home_dir }}"
       register: nop_file
     - ansible.builtin.debug:
-        msg: "tomcat is downloaded to {{ home_dir }}"
+        msg: "nop is downloaded to {{ home_dir }}"
     - name:  unzip nop
       ansible.builtin.unarchive:
         src: "{{ nop_url }}"
-        dest: /nop/nopCommerce
-        owner: nop
+        dest: "{{ home_dir }}"
+        owner: "{{ user }}"
         remote_src: yes
       when: "not nop_file.stat.exists"
     - ansible.builtin.debug:
