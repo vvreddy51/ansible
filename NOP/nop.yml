@@ -43,7 +43,6 @@
         dest: "{{ home_dir }}"
         owner: "{{ user }}"
         group: "{{ group }}"  
-        mode: "755"
         remote_src: yes
     - ansible.builtin.debug:
         msg: "tomcat is downloaded and extracted to nopCommerce"
@@ -52,6 +51,8 @@
         path: "{{ home_dir }}"
         owner: "{{ user }}"
         group: "{{ group }}"
+        recurse: true
+        mode: "0755"
     - name: create service file
       ansible.builtin.template:
         src: templates/nopCommerce.service.j2
@@ -60,7 +61,7 @@
        - start nopCommerce
   handlers:
     - name: start nopCommerce
-      ansible.builtin.systemd_service:
+      ansible.builtin.systemd_service:  
         name: nopCommerce
         daemon_reload: true
         enabled: yes
