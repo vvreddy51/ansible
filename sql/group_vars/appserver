@@ -1,0 +1,5 @@
+---
+mysqlrootpassword: admin123
+user: nop
+password: nop123
+database: nopdb

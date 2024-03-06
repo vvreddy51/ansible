@@ -1,0 +1,39 @@
+---
+- name: install mysql
+  hosts:
+  become: yes
+  tasks:
+   - name: update cache
+     ansible.builtin.apt:
+       update_cache: yes
+   - name: installing mysql
+     ansible.builtin.apt:
+       name: mysql-server
+       state: present
+     notify:
+      - start mysql
+   - name: creating user and password 
+     community.mysql.mysql_user:
+      name: "{{ user }}"
+      password: "{{ password }}"
+      host: '%'
+      priv: "{{ database }}.*:ALL,GRANT" 
+      state: present
+   - name: creating nopdb
+     community.mysql.mysql_db: 
+       name: "{{ database }}"
+       state: present
+   - name: flush previleges
+     community.mysql.mysql_db: 
+       name: "{{ database }}"
+       state: flush_privileges
+     notify:
+       - start mysql
+  handlers:
+   - name: start mysql
+     ansible.builtin.systemd_service:
+        name: mysql
+        enabled: yes
+        state: started
+     
+

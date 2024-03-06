@@ -1,0 +1,20 @@
+
+    1   sudo apt update
+    2  sudo apt install mysql-server
+    3  sudo systemctl start mysql.service
+    4  sudo mysql
+     root
+
+     # create a user with password
+
+     CREATE USER 'nop'@'%' IDENTIFIED BY 'nop123';
+
+     # create database nopdb
+     CREATE DATABASE nopdb
+     # grant permissions to user 
+
+     GRANT ALL PRIVILEGES ON nopdb.* TO 'nop'@'%' WITH GRANT OPTION;
+
+      FLUSH PRIVILEGES
+      sudo systemctl status mysql.service
+    
