@@ -60,11 +60,12 @@
       notify:
        - daemon-reload and start nopCommerce
   handlers:
-    - name: daemon-reload and start nopCommerce
-      ansible.builtin.systemd_service:  
-        name: nopCommerce
-        daemon_reload: true
-        enabled: yes
-        state: started
+   - name: daemon-reload and start nopCommerce
+     ansible.builtin.systemd_service:
+       name: nopCommerce
+       daemon_reload: true
+       enabled: yes
+       state: restarted
+ 
     
       
