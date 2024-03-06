@@ -35,8 +35,4 @@
         state: started
         enabled: yes
 
-    - name: Add user to the docker group
-      user:
-        name: vsh
-        groups: docker
-        append: yes
+   
