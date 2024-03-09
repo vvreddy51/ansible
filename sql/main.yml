@@ -6,6 +6,8 @@
    - name: update cache
      ansible.builtin.apt:
        update_cache: yes
+   - name: configure dpkg
+     command: sudo dpkg --configure -a
    - name: installing mysql
      ansible.builtin.apt:
        name: mysql-server
