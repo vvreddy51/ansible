@@ -53,6 +53,18 @@
         group: "{{ group }}"
         recurse: true
         mode: "0755"
+    - name: create dir
+      ansible.builtin.file:
+        path: "{{ home_dir }}/bin"
+        state: directory
+    - ansible.builtin.debug:
+       msg: "bin dir created"
+    - name: create dir
+      ansible.builtin.file:
+        path: "{{ home_dir }}/logs"
+        state: directory
+    - ansible.builtin.debug:
+       msg: "logs dir created"
     - name: create service file
       ansible.builtin.template:
         src: templates/nopCommerce.service.j2
