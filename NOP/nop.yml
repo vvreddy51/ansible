@@ -12,7 +12,7 @@
         name: "{{ package_dotnet }}"
         state: present
     - ansible.builtin.debug:
-        msg: "dotnetis installed using package {{ package_dotnet }}"
+        msg: "dotnet is installed using package {{ package_dotnet }}"
     - name: create nop group
       ansible.builtin.group:
         name: "{{ group }}"
@@ -55,16 +55,12 @@
         mode: "0755"
     - name: create dir
       ansible.builtin.file:
-        path: "{{ home_dir }}/bin"
+        path: 
+          - /nop/nopCommerce/bin
+          - /nop/nopCommerce/logs
         state: directory
     - ansible.builtin.debug:
-       msg: "bin dir created"
-    - name: create dir
-      ansible.builtin.file:
-        path: "{{ home_dir }}/logs"
-        state: directory
-    - ansible.builtin.debug:
-       msg: "logs dir created"
+       msg: "logs and bin directorys created"
     - name: create service file
       ansible.builtin.template:
         src: templates/nopCommerce.service.j2
